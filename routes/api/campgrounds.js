@@ -53,7 +53,7 @@ router.post(
 );
 
 // @route   GET api/campgrounds
-// @desc    Get all campground
+// @desc    Get all campgrounds
 // @access  Public
 router.get('/', async (req, res) => {
 	try {

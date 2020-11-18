@@ -1,11 +1,13 @@
 import React, { Fragment, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { connect } from 'react-redux';
+import { login } from '../../actions/auth';
 
-const Login = () => {
+const Login = ({ login, isAuthenticated }) => {
 	// state name, set state, initial state
 	const [formData, setFormData] = useState({
 		email: '',
-		password: ''
+		password: '',
 	});
 
 	const { email, password } = formData;
@@ -15,8 +17,13 @@ const Login = () => {
 
 	const onSubmit = async e => {
 		e.preventDefault();
-		console.log('SUCCESS');
+		login(email, password);
 	};
+
+	// Redirect if login was successful
+	if (isAuthenticated) {
+		return <Redirect to='/api/campgrounds' />;
+	}
 
 	return (
 		<Fragment>
@@ -54,4 +61,8 @@ const Login = () => {
 	);
 };
 
-export default Login;
+const mapStateToProps = state => ({
+	isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps, { login })(Login);
