@@ -4,59 +4,65 @@ const Schema = mongoose.Schema;
 const CampgroundSchema = new Schema({
 	user: {
 		type: Schema.Types.ObjectId,
-		ref: 'user'
+		ref: 'user',
+	},
+	author: {
+		type: String,
+	},
+	avatar: {
+		type: String,
 	},
 	name: {
 		type: String,
-		required: true
+		required: true,
 	},
 	price: {
 		type: Number,
-		required: true
+		required: true,
 	},
 	image: {
 		type: String,
-		required: true
+		required: true,
 	},
 	description: {
 		type: String,
-		required: true
+		required: true,
 	},
 	likes: [
 		{
 			user: {
 				type: Schema.Types.ObjectId,
-				ref: 'user'
-			}
-		}
+				ref: 'user',
+			},
+		},
 	],
 	// model for one comment in an array of comments
 	comments: [
 		{
 			user: {
 				type: Schema.Types.ObjectId,
-				ref: 'user'
+				ref: 'user',
 			},
 			text: {
 				type: String,
-				required: true
+				required: true,
 			},
 			name: {
-				type: String
+				type: String,
 			},
 			avatar: {
-				type: String
+				type: String,
 			},
 			date: {
 				type: Date,
-				default: Date.now
-			}
-		}
+				default: Date.now,
+			},
+		},
 	],
 	date: {
 		type: Date,
-		default: Date.now
-	}
+		default: Date.now,
+	},
 });
 
 module.exports = Campground = mongoose.model('campground', CampgroundSchema);

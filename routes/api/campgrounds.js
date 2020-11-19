@@ -16,7 +16,7 @@ router.post(
 		body('name', 'Campground name is required').not().isEmpty(),
 		body('price', 'Campground price is required').not().isEmpty(),
 		body('image', 'Campground image is required').not().isEmpty(),
-		body('description', 'Campground description is required').not().isEmpty()
+		body('description', 'Campground description is required').not().isEmpty(),
 	],
 	async (req, res) => {
 		const errors = validationResult(req);
@@ -27,16 +27,19 @@ router.post(
 		const { name, price, image, description } = req.body;
 
 		try {
+			const user = await User.findById(req.user.id).select('-password');
 			const profile = await Profile.findOne({
-				user: req.user.id
+				user: req.user.id,
 			});
 
 			let campground = new Campground({
 				user: req.user.id,
+				author: user.name,
+				avatar: user.avatar,
 				name,
 				price,
 				image,
-				description
+				description,
 			});
 
 			// add campground to user profile
@@ -49,7 +52,7 @@ router.post(
 			console.error(err.message);
 			res.status(500).send('Server Error');
 		}
-	}
+	},
 );
 
 // @route   GET api/campgrounds
@@ -104,6 +107,7 @@ router.put('/:id', auth, async (req, res) => {
 		if (description) campground.description = description;
 
 		campground.save();
+
 		return res.json(campground);
 	} catch (err) {
 		if (err.kind === 'ObjectId') {
@@ -120,7 +124,7 @@ router.delete('/:id', auth, async (req, res) => {
 	try {
 		const campground = await Campground.findById(req.params.id);
 		const profile = await Profile.findOne({
-			user: req.user.id
+			user: req.user.id,
 		});
 
 		if (!campground) {
@@ -128,7 +132,7 @@ router.delete('/:id', auth, async (req, res) => {
 		}
 
 		// Check campground ownership
-		if (campground.user.id.toString() !== req.user.id) {
+		if (campground.user.toString() !== req.user.id) {
 			return res.status(401).json({ msg: 'User not authorized' });
 		}
 
@@ -219,7 +223,7 @@ router.post(
 				user: req.user.id,
 				text: req.body.text,
 				name: user.name,
-				avatar: user.avatar
+				avatar: user.avatar,
 			};
 
 			campground.comments.unshift(newComment);
@@ -231,7 +235,7 @@ router.post(
 			console.error(err.message);
 			res.status(500).send('Server Error');
 		}
-	}
+	},
 );
 
 // @route   Delete api/campgrounds/comment/:id/:comment_id
@@ -243,7 +247,7 @@ router.delete('/comment/:id/:comment_id', auth, async (req, res) => {
 
 		// Pull out comment
 		const comment = campground.comments.find(
-			comment => comment.id === req.params.comment_id
+			comment => comment.id === req.params.comment_id,
 		);
 
 		// Make sure comment exists

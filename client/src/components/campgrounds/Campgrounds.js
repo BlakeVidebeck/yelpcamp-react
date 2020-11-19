@@ -1,54 +1,59 @@
-import React, { useState, useEffect } from 'react';
+import React, { Fragment, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import Spinner from '../layout/Spinner';
 import CampgroundCard from './CampgroundCard';
+import { getCampgrounds } from '../../actions/campground';
 
-const Campgrounds = () => {
-	const [campgrounds, setCampgrounds] = useState([]);
+const Campgrounds = ({
+	getCampgrounds,
+	campground: { campgrounds, loading },
+	isAuthenticated,
+}) => {
 	useEffect(() => {
-		setCampgrounds(arr);
+		getCampgrounds();
 		// eslint-disable-next-line
-	}, []);
+	}, [getCampgrounds]);
 
-	const arr = [
-		{
-			id: 1,
-			name: 'Swallow falls',
-			price: '9.00',
-			description: 'Such a beutiful place!',
-			author: 'Blake',
-			image:
-				'https://www.yosemite.com/wp-content/uploads/2016/04/westlake-campground.png',
-		},
-		{
-			id: 2,
-			name: 'Fugly falls',
-			price: '11.00',
-			description: 'Such a pretty place!',
-			author: 'John',
-			image:
-				'https://www.yosemite.com/wp-content/uploads/2016/04/westlake-campground.png',
-		},
-	];
-	return (
-		<div>
+	return loading ? (
+		<Spinner />
+	) : (
+		<Fragment>
 			<header className='jumbotron'>
 				<div className='container'>
 					<h1>Welcome to YelpCamp</h1>
 					<p>View our hand-picked campgrounds from all over the world</p>
-					<p>
-						<a className='btn btn-primary btn-lg' href='/campgrounds/new'>
-							Add New Campground
-						</a>
-					</p>
+					{isAuthenticated && (
+						<p>
+							<Link
+								to='/api/campgrounds/new'
+								className='btn btn-primary btn-lg'
+							>
+								Add New Campground
+							</Link>
+						</p>
+					)}
 				</div>
 			</header>
 
 			<div className='row text-center col-sm-12 m-0 p-0'>
-				{campgrounds.map((campground, index) => (
-					<CampgroundCard key={index} campground={campground} />
+				{campgrounds.map(campground => (
+					<CampgroundCard key={campground._id} campground={campground} />
 				))}
 			</div>
-		</div>
+		</Fragment>
 	);
 };
 
-export default Campgrounds;
+Campgrounds.propTypes = {
+	getCampgrounds: PropTypes.func.isRequired,
+	campground: PropTypes.object.isRequired,
+};
+
+const mapStateToProps = state => ({
+	campground: state.campground,
+	isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps, { getCampgrounds })(Campgrounds);

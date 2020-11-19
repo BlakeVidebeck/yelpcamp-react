@@ -5,6 +5,7 @@ import Login from '../auth/Login';
 import Alert from '../layout/Alert';
 import Campgrounds from '../campgrounds/Campgrounds';
 import Campground from '../campgrounds/Campground';
+import NewCampgroundForm from '../campgrounds/NewCampgroundForm';
 
 const Routes = props => {
 	return (
@@ -14,6 +15,16 @@ const Routes = props => {
 				<Route exact path='/register' component={Register} />
 				<Route exact path='/login' component={Login} />
 				<Route exact path='/api/campgrounds' component={Campgrounds} />
+				<Route
+					exact
+					path='/api/campgrounds/new'
+					component={NewCampgroundForm}
+				/>
+				<Route
+					exact
+					path='/api/campgrounds/:id/edit'
+					component={NewCampgroundForm}
+				/>
 				<Route exact path='/api/campgrounds/:id' component={Campground} />
 			</Switch>
 		</section>

@@ -1,11 +1,91 @@
-import React from 'react';
+import React, { Fragment, useEffect, useState } from 'react';
+import { Redirect, Link } from 'react-router-dom';
+import { connect } from 'react-redux';
+import Spinner from '../layout/Spinner';
+import PropTypes from 'prop-types';
+import { getCampground, deleteCampground } from '../../actions/campground';
 
-const Campground = () => {
-	return (
-		<div className='col-sm-12 col-lg-9'>
-			<h1>Hello</h1>
-		</div>
+const Campground = ({
+	getCampground,
+	campground: { campground, loading },
+	auth,
+	match,
+	deleteCampground,
+}) => {
+	useEffect(() => {
+		getCampground(match.params.id);
+	}, [getCampground]);
+
+	const [removed, setRemoved] = useState(false);
+
+	const removeCampground = async e => {
+		await deleteCampground(campground._id);
+		setRemoved(!removed);
+	};
+
+	if (removed) {
+		return <Redirect to='/api/campgrounds' />;
+	}
+
+	// need to this if statement as when the page first loads, it returns null
+	// so the page breaks
+	return loading || campground === null ? (
+		<Spinner />
+	) : (
+		<Fragment>
+			<div className='col-sm-12 col-lg-9'>
+				<div className='card mb-3'>
+					<img className='card-img-top' src={campground.image} />
+					<div className='card-body'>
+						<h4 className='float-right'>${campground.price}/night</h4>
+						<h4 className='card-title'>
+							<a>{campground.name}</a>
+						</h4>
+						<p className='card-text'>{campground.description}</p>
+						<p className='card-text w-50 d-inline-block'>
+							<em>Submitted By: {campground.author}</em>
+						</p>
+
+						<div className='float-right d-inline-block'>
+							{!loading &&
+								auth.user !== null &&
+								campground.user === auth.user._id && (
+									<Fragment>
+										{/* Edit button */}
+										<Link
+											className='btn btn-sm btn-primary'
+											to={`/api/campgrounds/${campground._id}/edit`}
+										>
+											Edit
+										</Link>
+										{/* delete button */}
+										<button
+											className='btn btn-sm btn-danger'
+											onClick={removeCampground}
+										>
+											Delete
+										</button>
+									</Fragment>
+								)}
+						</div>
+					</div>
+				</div>
+			</div>
+		</Fragment>
 	);
 };
 
-export default Campground;
+Campground.propTypes = {
+	getCampground: PropTypes.func.isRequired,
+	campground: PropTypes.object.isRequired,
+	deleteCampground: PropTypes.func.isRequired,
+};
+
+const mapStateToProps = state => ({
+	campground: state.campground,
+	auth: state.auth,
+});
+
+export default connect(mapStateToProps, { getCampground, deleteCampground })(
+	Campground,
+);

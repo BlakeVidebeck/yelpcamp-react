@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 
-const CampgroundCard = ({ campground: { id, name, description, image } }) => {
+const CampgroundCard = ({ campground: { _id, name, description, image } }) => {
 	return (
 		<div className='col-md-6 col-lg-3'>
 			<div className='card'>
@@ -11,7 +11,7 @@ const CampgroundCard = ({ campground: { id, name, description, image } }) => {
 					<p className='card-text text-truncate'>{description}</p>
 				</div>
 				<p>
-					<Link to={`/api/campgrounds/${id}`} className='btn btn-primary'>
+					<Link to={`/api/campgrounds/${_id}`} className='btn btn-primary'>
 						More Info
 					</Link>
 				</p>
