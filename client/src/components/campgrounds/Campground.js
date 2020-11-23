@@ -3,6 +3,8 @@ import { Redirect, Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import Spinner from '../layout/Spinner';
 import PropTypes from 'prop-types';
+import Comment from '../comment/Comment';
+import CommentForm from '../comment/CommentForm';
 import { getCampground, deleteCampground } from '../../actions/campground';
 
 const Campground = ({
@@ -27,20 +29,18 @@ const Campground = ({
 		return <Redirect to='/api/campgrounds' />;
 	}
 
-	// need to this if statement as when the page first loads, it returns null
+	// need this if statement as when the page first loads, it returns null
 	// so the page breaks
 	return loading || campground === null ? (
 		<Spinner />
 	) : (
 		<Fragment>
-			<div className='col-sm-12 col-lg-9'>
+			<div className='col-sm-12 col-lg-9 mx-auto p-0'>
 				<div className='card mb-3'>
-					<img className='card-img-top' src={campground.image} />
+					<img className='card-img-top' src={campground.image} alt='' />
 					<div className='card-body'>
 						<h4 className='float-right'>${campground.price}/night</h4>
-						<h4 className='card-title'>
-							<a>{campground.name}</a>
-						</h4>
+						<h4 className='card-title'>{campground.name}</h4>
 						<p className='card-text'>{campground.description}</p>
 						<p className='card-text w-50 d-inline-block'>
 							<em>Submitted By: {campground.author}</em>
@@ -70,6 +70,24 @@ const Campground = ({
 						</div>
 					</div>
 				</div>
+			</div>
+
+			{/* comments */}
+			<div className='card col-sm-12 col-lg-9 mx-auto p-0'>
+				{!loading && auth.user !== null && (
+					<Fragment>
+						<div className='card-header'>Add Comment</div>
+						<CommentForm campgroundId={campground._id} />
+					</Fragment>
+				)}
+				<div className='card-header'>Comments</div>
+				{campground.comments.map(comment => (
+					<Comment
+						key={comment._id}
+						comment={comment}
+						campgroundId={campground._id}
+					/>
+				))}
 			</div>
 		</Fragment>
 	);

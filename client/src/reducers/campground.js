@@ -5,6 +5,8 @@ import {
 	ADD_CAMPGROUND,
 	DELETE_CAMPGROUND,
 	EDIT_CAMPGROUND,
+	ADD_COMMENT,
+	DELETE_COMMENT,
 } from '../actions/types';
 
 const initialState = {
@@ -22,6 +24,7 @@ export default function (state = initialState, action) {
 			return {
 				...state,
 				campgrounds: payload,
+				campground: null,
 				loading: false,
 			};
 		case GET_CAMPGROUND:
@@ -48,6 +51,26 @@ export default function (state = initialState, action) {
 				campgrounds: state.campgrounds.filter(
 					campground => campground._id !== payload,
 				),
+				loading: false,
+			};
+		case ADD_COMMENT:
+			return {
+				...state,
+				campground: {
+					...state.campground,
+					comments: payload,
+				},
+				loading: false,
+			};
+		case DELETE_COMMENT:
+			return {
+				...state,
+				campground: {
+					...state.campground,
+					comments: state.campground.comments.filter(
+						comment => comment._id !== payload,
+					),
+				},
 				loading: false,
 			};
 		case CAMPGROUND_ERROR:

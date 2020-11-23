@@ -18,7 +18,7 @@ const CampgroundForm = ({
 				description: campground.description,
 			});
 		}
-	}, []);
+	}, [campground]);
 
 	const [formData, setFormData] = useState({
 		name: '',
@@ -36,11 +36,11 @@ const CampgroundForm = ({
 
 	const onSubmit = async e => {
 		e.preventDefault();
-		{
-			campground !== null
-				? await editCampground(campground._id, formData)
-				: await addCampground(formData);
-		}
+
+		campground !== null
+			? await editCampground(campground._id, formData)
+			: await addCampground(formData);
+
 		setIsSubmitted(!isSubmitted);
 	};
 
@@ -104,12 +104,24 @@ const CampgroundForm = ({
 				</div>
 
 				<input type='submit' className='btn btn-primary my-1' />
-				<Link className='btn btn-light my-1' to='/api/campgrounds'>
+				<Link
+					className='btn btn-light my-1'
+					to={
+						campground !== null
+							? `/api/campgrounds/${campground._id}`
+							: '/api/campgrounds'
+					}
+				>
 					Go Back
 				</Link>
 			</form>
 		</Fragment>
 	);
+};
+
+CampgroundForm.propType = {
+	addCampground: PropTypes.func.isRequired,
+	editCampground: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = state => ({
