@@ -13,7 +13,7 @@ const Campground = require('../../models/Campground');
 router.get('/me', auth, async (req, res) => {
 	try {
 		const profile = await Profile.findOne({
-			user: req.user.id
+			user: req.user.id,
 		}).populate('user', ['name', 'avatar']);
 
 		if (!profile) {
@@ -45,7 +45,7 @@ router.post('/', auth, async (req, res) => {
 		profile = await Profile.findOneAndUpdate(
 			{ user: req.user.id },
 			{ $set: profileFields },
-			{ new: true }
+			{ new: true },
 		);
 
 		return res.json(profile);
@@ -61,8 +61,8 @@ router.post('/', auth, async (req, res) => {
 router.get('/user/:user_id', async (req, res) => {
 	try {
 		const profile = await Profile.findOne({
-			user: req.params.user_id
-		}).populate('user', ['name', 'avatar']);
+			user: req.params.user_id,
+		}).populate('user', ['name', 'username', 'bio', 'location', 'avatar']);
 
 		if (!profile) return res.status(400).json({ msg: 'Profile not found' });
 

@@ -11,7 +11,7 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
 				<Link to='/api/campgrounds'>Campgrounds</Link>
 			</li>
 			<li>
-				<Link to='#'>Profile</Link>
+				<Link to='/api/profile/me'>Profile</Link>
 			</li>
 			<li>
 				<a onClick={logout} href='#!'>

@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 
 const CampgroundCard = ({ campground: { _id, name, description, image } }) => {
 	return (
-		<div className='col-md-6 col-lg-3'>
+		<div className='col-md-6 col-lg-4'>
 			<div className='card'>
 				<img className='card-img-top' src={image} alt='' />
 				<div className='card-body'>

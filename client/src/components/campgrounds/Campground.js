@@ -43,7 +43,12 @@ const Campground = ({
 						<h4 className='card-title'>{campground.name}</h4>
 						<p className='card-text'>{campground.description}</p>
 						<p className='card-text w-50 d-inline-block'>
-							<em>Submitted By: {campground.author}</em>
+							<em>
+								Submitted By:{' '}
+								<Link to={`/api/profile/${campground.user}`}>
+									{campground.author}
+								</Link>
+							</em>
 						</p>
 
 						<div className='float-right d-inline-block'>
@@ -61,7 +66,7 @@ const Campground = ({
 										{/* delete button */}
 										<button
 											className='btn btn-sm btn-danger'
-											onClick={removeCampground}
+											onClick={e => removeCampground()}
 										>
 											Delete
 										</button>

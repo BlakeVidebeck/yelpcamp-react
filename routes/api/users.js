@@ -15,11 +15,12 @@ router.post(
 	'/',
 	[
 		body('name', 'Name is required').not().isEmpty(),
+		body('username', 'Username is required').not().isEmpty(),
 		body('email', 'Please include a valid email').isEmail(),
 		body(
 			'password',
-			'Please enter a password with 6 or more characters'
-		).isLength({ min: 6 })
+			'Please enter a password with 6 or more characters',
+		).isLength({ min: 6 }),
 	],
 	async (req, res) => {
 		const errors = validationResult(req);
@@ -27,12 +28,13 @@ router.post(
 			return res.status(400).json({ errors: errors.array() });
 		}
 
-		const { name, email, password } = req.body;
+		const { name, username, email, password } = req.body;
 
 		try {
-			let user = await User.findOne({ email });
+			let userEmail = await User.findOne({ email });
+			let userUsername = await User.findOne({ username });
 
-			if (user) {
+			if (userEmail || userUsername) {
 				return res
 					.status(400)
 					.json({ errors: [{ msg: 'User already exists' }] });
@@ -41,18 +43,19 @@ router.post(
 			const avatar = gravatar.url(email, {
 				s: '200',
 				r: 'pg',
-				d: 'mm'
+				d: 'mm',
 			});
 
 			user = new User({
 				name,
+				username,
 				email,
 				password,
-				avatar
+				avatar,
 			});
 
 			let profile = new Profile({
-				user
+				user,
 			});
 
 			const salt = await bcrypt.genSalt(10);
@@ -63,8 +66,8 @@ router.post(
 
 			const payload = {
 				user: {
-					id: user.id
-				}
+					id: user.id,
+				},
 			};
 
 			jwt.sign(
@@ -74,13 +77,13 @@ router.post(
 				(err, token) => {
 					if (err) throw err;
 					res.json({ token });
-				}
+				},
 			);
 		} catch (err) {
 			console.error(err.message);
 			res.status(500).send('Server error');
 		}
-	}
+	},
 );
 
 module.exports = router;

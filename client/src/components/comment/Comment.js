@@ -14,21 +14,23 @@ const Comment = ({
 			<div className='card'>
 				<div className='ml-1 mt-2'>
 					<div className='card-title'>
-						<Link to={`/users/${user}`}>
+						<Link to={`/api/profile/${user}`}>
 							<img className='comment-thumbnail mr-1' src={avatar} alt='' />
 							<strong>{name}</strong>
 						</Link>
 					</div>
-					<p className='my-1 card-text'>{text}</p>
-					{!auth.loading && auth.user !== null && user === auth.user._id && (
-						<button
-							onClick={e => deleteComment(campgroundId, _id)}
-							type='button'
-							className='btn btn-danger'
-						>
-							<i className='fas fa-times'></i>
-						</button>
-					)}
+					<div className='d-flex justify-content-between'>
+						<p className='my-1 card-text'>{text}</p>
+						{!auth.loading && auth.user !== null && user === auth.user._id && (
+							<button
+								onClick={e => deleteComment(campgroundId, _id)}
+								type='button'
+								className='btn btn-danger mb-1'
+							>
+								<i className='fas fa-times'></i>
+							</button>
+						)}
+					</div>
 				</div>
 			</div>
 		</>

@@ -14,7 +14,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 		password2: '',
 	});
 
-	const { name, email, password, password2 } = formData;
+	const { name, username, email, password, password2 } = formData;
 
 	const onChange = e =>
 		setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -24,7 +24,7 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 		if (password !== password2) {
 			setAlert('Passwords do not match', 'danger');
 		} else {
-			register({ name, email, password });
+			register({ name, username, email, password });
 		}
 	};
 
@@ -46,6 +46,16 @@ const Register = ({ setAlert, register, isAuthenticated }) => {
 						placeholder='Name'
 						name='name'
 						value={name}
+						onChange={e => onChange(e)}
+						required
+					/>
+				</div>
+				<div className='form-group'>
+					<input
+						type='text'
+						placeholder='Username'
+						name='username'
+						value={username}
 						onChange={e => onChange(e)}
 						required
 					/>

@@ -3,26 +3,35 @@ const mongoose = require('mongoose');
 const ProfileSchema = new mongoose.Schema({
 	user: {
 		type: mongoose.Schema.Types.ObjectId,
-		ref: 'user'
+		ref: 'user',
 	},
 	location: {
-		type: String
+		type: String,
 	},
 	bio: {
-		type: String
+		type: String,
 	},
 	campgrounds: [
 		{
-			campground: {
+			id: {
 				type: mongoose.Schema.Types.ObjectId,
-				ref: 'campground'
-			}
-		}
+				ref: 'campground',
+			},
+			username: {
+				type: String,
+			},
+			image: {
+				type: String,
+			},
+			description: {
+				type: String,
+			},
+		},
 	],
 	date: {
 		type: Date,
-		default: Date.now
-	}
+		default: Date.now,
+	},
 });
 
 module.exports = Profile = mongoose.model('profile', ProfileSchema);

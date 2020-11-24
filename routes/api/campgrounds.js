@@ -34,7 +34,7 @@ router.post(
 
 			let campground = new Campground({
 				user: req.user.id,
-				author: user.name,
+				author: user.username,
 				avatar: user.avatar,
 				name,
 				price,
@@ -43,7 +43,12 @@ router.post(
 			});
 
 			// add campground to user profile
-			profile.campgrounds.unshift(campground);
+			profile.campgrounds.unshift({
+				_id: campground,
+				name,
+				image,
+				description,
+			});
 
 			await campground.save();
 			await profile.save();
@@ -138,8 +143,9 @@ router.delete('/:id', auth, async (req, res) => {
 
 		// remove campground from user profile
 		const removeIndex = profile.campgrounds
-			.map(campground => campground.id.toString())
+			.map(campground => campground._id.toString())
 			.indexOf(req.params.id);
+
 		profile.campgrounds.splice(removeIndex, 1);
 		await profile.save();
 

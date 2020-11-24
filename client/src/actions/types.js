@@ -6,7 +6,6 @@ export const USER_LOADED = 'USER_LOADED';
 export const AUTH_ERROR = 'AUTH_ERROR';
 export const LOGIN_SUCCESS = 'LOGIN_SUCCESS';
 export const LOGIN_FAIL = 'LOGIN_FAIL';
-export const CLEAR_PROFILE = 'CLEAR_PROFILE';
 export const LOGOUT = 'LOGOUT';
 
 export const GET_CAMPGROUNDS = 'GET_CAMPGROUNDS';
@@ -18,3 +17,9 @@ export const EDIT_CAMPGROUND = 'EDIT_CAMPGROUND';
 
 export const ADD_COMMENT = 'ADD_COMMENT';
 export const DELETE_COMMENT = 'DELETE_COMMENT';
+
+export const GET_PROFILE = 'GET_PROFILE';
+export const PROFILE_ERROR = 'PROFILE_ERROR';
+export const UPDATE_PROFILE = 'UPDATE_PROFILE';
+export const ACCOUNT_DELETED = 'ACCOUNT_DELETED';
+export const CLEAR_PROFILE = 'CLEAR_PROFILE';
